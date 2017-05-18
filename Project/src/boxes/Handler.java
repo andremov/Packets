@@ -5,7 +5,10 @@
  */
 package boxes;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 /**
  *
@@ -52,10 +55,11 @@ public abstract class Handler {
             places.add(new Place(i,Data.PLACE_LIST.get(i),Data.getConnections(i)));
         }
 		
-        new Window();
+//        new Window();
         createMatrix();
 		
         currentStage = STAGE_LOCATE_PLACES;
+		consoleInput();
     }
     
     public static void createMatrix() {
@@ -284,5 +288,85 @@ public abstract class Handler {
         }
     }
 	
-	
+	public static void consoleInput() {
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			
+			System.out.println("Digite numero de cajas a agregar.");
+			int numCajas = Integer.parseInt(br.readLine());
+			
+			while (numCajas <= 0 || numCajas >= NUM_PLACES) {
+				System.out.println("Digite un numero valido.");
+				numCajas = Integer.parseInt(br.readLine());
+			}
+			
+			for (int i = 0; i < numCajas; i++) {
+				System.out.println("Donde desea agregar la caja "+(i+1)+"?");
+				System.out.println("Posibilidades:");
+				for (int j = 0; j < NUM_PLACES; j++) {
+					if (!places.get(j).isBox()) {
+						System.out.println(j+": "+places.get(j).getName());
+					}
+				}
+				int newBox = Integer.parseInt(br.readLine());
+				
+				while (places.get(newBox).isBox() || newBox < 0 || newBox >= NUM_PLACES) {
+					System.out.println("Digite un sitio valido.");
+					newBox = Integer.parseInt(br.readLine());
+				}
+				
+				places.get(newBox).setBox(true);
+				System.out.println("Se agregó la caja a "+places.get(newBox).getName()+".");
+			}
+			
+			System.out.println("Digite numero de personas a agregar.");
+			int numPersonas = Integer.parseInt(br.readLine());
+			
+			while (numPersonas <= 0 || numPersonas >= NUM_PLACES) {
+				System.out.println("Digite un numero valido.");
+				numPersonas = Integer.parseInt(br.readLine());
+			}
+			
+			for (int i = 0; i < numPersonas; i++) {
+				System.out.println("Donde desea agregar la persona "+(i+1)+"?");
+				for (int j = 0; j < NUM_PLACES; j++) {
+					if (!hasPerson(j)) {
+						System.out.println(j+": "+places.get(j).getName());
+					}
+				}
+				int newPerson = Integer.parseInt(br.readLine());
+				
+				while (hasPerson(newPerson) || newPerson < 0 || newPerson >= NUM_PLACES) {
+					System.out.println("Digite un sitio valido.");
+					newPerson = Integer.parseInt(br.readLine());
+				}
+				
+				people.add(new Person(newPerson));
+				System.out.println("Se agregó la persona a "+places.get(newPerson).getName()+".");
+			}
+			
+			
+			solve();
+			
+			double totalCost = 0;
+			for (int i = 0; i < people.size(); i++) {
+				String start = places.get(people.get(i).history.get(0)).getName();
+				double thisPersonCost = 0;
+				System.out.println("La persona "+(i+1)+" empezó en "+start+".");
+				for (int j = 1; j < people.get(i).history.size(); j++) {
+					int id = people.get(i).history.get(j);
+					String name = places.get(id).getName();
+					double cost = people.get(i).distances.get(j);
+					System.out.println("Se movió a "+name+", costando "+(cost/100)+".");
+					if (places.get(id).isBox()) {
+						System.out.println(name+" tiene una caja.");
+					}
+					thisPersonCost = thisPersonCost + cost;
+				}
+				System.out.println("Esta persona gastó "+(thisPersonCost/100)+".");
+				totalCost = totalCost+thisPersonCost;
+			}
+			System.out.println("Se gastó en total "+(totalCost/100)+".");
+		} catch (Exception e) { }
+	}
 }
