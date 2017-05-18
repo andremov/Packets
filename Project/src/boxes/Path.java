@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * @author movillaf
  */
 public class Path {
+	
     private int goal;
     private ArrayList<PlaceConnection> connections;
     private double total;

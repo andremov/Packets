@@ -29,29 +29,31 @@ public class Person {
 		distances.add(newDistance);
 	}
         
-        public int getCurrent() {
-            return history.get(Integer.min(history.size()-1,Handler.currentSolveStep));
-        }
-        
-        public int getLast() {
-            return history.get(history.size()-1);
-        }
+	public int getCurrent() {
+		return history.get(Integer.min(history.size()-1,Handler.currentSolveStep));
+	}
+
+	public int getLast() {
+		return history.get(history.size()-1);
+	}
 	
 	public void backStep() {
-            history.remove(history.size()-1);
-            distances.remove(distances.size()-1);
+		history.remove(history.size()-1);
+		distances.remove(distances.size()-1);
 	}
         
-        public void backTo(int cityID) {
-            int newSize = 1;
-            for (int i = 0; i < history.size(); i++) {
-                if (history.get(i) == cityID) {
-                    newSize = i+1;
-                }
-            }
-            while (history.size() != newSize) {
-                backStep();
-            }
-        }
+	public void backTo(int cityID) {
+		int newSize = 1;
+		
+		for (int i = 0; i < history.size(); i++) {
+			if (history.get(i) == cityID) {
+				newSize = i+1;
+			}
+		}
+		
+		while (history.size() != newSize) {
+			backStep();
+		}
+	}
 	
 }

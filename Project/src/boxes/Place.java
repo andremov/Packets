@@ -47,10 +47,6 @@ public class Place {
 		java.awt.FontMetrics metrics = g.getFontMetrics(font);
 		while (70 - metrics.stringWidth(this.name) < 0 || 20 - metrics.getHeight() < 0) {
 			fontSize--;
-//			if (fontSize <= 12) {
-//				fontSize = 40;
-//				this.name = this.name.substring(0, this.name.length()-1);
-//			}
 			font = new Font("Arial",Font.PLAIN,fontSize);
 			metrics = g.getFontMetrics(font);
 		}
@@ -58,46 +54,44 @@ public class Place {
 		fontY = ((20 - metrics.getHeight()) / 2) + metrics.getAscent();
 	}
         
-        public void takeBox() {
-            this.taken = true;
-        }
-        
-        public boolean isContained(int x, int y) {
-            return (this.x <= x && this.x+70 >= x && this.y <= y && this.y+70 >= y);
-        }
+	public void takeBox() {
+		this.taken = true;
+	}
+
+	public boolean isContained(int x, int y) {
+		return (this.x <= x && this.x+70 >= x && this.y <= y && this.y+70 >= y);
+	}
 	
 	public BufferedImage getImage() {
 		BufferedImage image = new BufferedImage(70, 70, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = image.getGraphics();
 		
-//		g.setColor(Color.white);
-                g.setColor(Color.black);
+		g.setColor(Color.black);
 		g.drawRect(0, 0, 69, 69);
 		
-                BufferedImage img;
-                if (Handler.hasPerson(id) && isBox()) {
+		BufferedImage img;
+		if (Handler.hasPerson(id) && isBox()) {
 			img = Data.PLACE_BOTH;
-                } else if (Handler.hasPerson(id)) {
-                        img = Data.PLACE_PERSON;
-                } else if (isBox()) {
-                        img = Data.PLACE_PACKET;
+		} else if (Handler.hasPerson(id)) {
+			img = Data.PLACE_PERSON;
+		} else if (isBox()) {
+			img = Data.PLACE_PACKET;
 		} else {
-                        img = Data.PLACE_EMPTY;
+			img = Data.PLACE_EMPTY;
 		}
-                g.drawImage(img,10,0,50,50,null);
-                
+			
+		g.drawImage(img,10,0,50,50,null);
+             
 		g.setColor(Color.black);
-//		g.fillRect(0, 50, 60, 20);
-//		g.setColor(Color.white);
 		g.setFont(new Font("Arial",Font.PLAIN,fontSize));
 		g.drawString(this.name, fontX, 50+fontY);
 		
 		return image;
 	}
 
-        public boolean isLocated() {
-            return !(this.x == -200 && this.y == -200); 
-        }
+	public boolean isLocated() {
+		return !(this.x == -200 && this.y == -200); 
+	}
         
 	/**
 	 * @return the name
@@ -138,29 +132,33 @@ public class Place {
 	 * @param y the y to set
 	 */
 	public void setPos(int x, int y) {
-                this.x = x-DELTA_X;
+		this.x = x-DELTA_X;
 		this.y = y-DELTA_Y;
 	}
 
-        public double getCostTo(int id) {
-            double value = 0.0;
-            for (int i = 0; i < getConnections().size(); i++) {
-                if (getConnections().get(i).getGoal() == id) {
-                    value = getConnections().get(i).getTotal();
-                }
-            }
-            return value;
-        }
-        
-        public Path getPathTo(int id) {
-            Path path = null;
-            for (int i = 0; i < getConnections().size(); i++) {
-                if (getConnections().get(i).getGoal() == id) {
-                    path = getConnections().get(i);
-                }
-            }
-            return path;
-        }
+	public double getCostTo(int id) {
+		double value = 0.0;
+		
+		for (int i = 0; i < getConnections().size(); i++) {
+			if (getConnections().get(i).getGoal() == id) {
+				value = getConnections().get(i).getTotal();
+			}
+		}
+		
+		return value;
+	}
+
+	public Path getPathTo(int id) {
+		Path path = null;
+		
+		for (int i = 0; i < getConnections().size(); i++) {
+			if (getConnections().get(i).getGoal() == id) {
+				path = getConnections().get(i);
+			}
+		}
+		
+		return path;
+	}
         
     /**
      * @return the connections

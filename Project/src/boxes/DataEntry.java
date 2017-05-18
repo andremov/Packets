@@ -10,6 +10,7 @@ package boxes;
  * @author Andres
  */
 public class DataEntry {
+	
 	private String name;
 	private String connection;
 	private double cost;

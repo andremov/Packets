@@ -11,13 +11,13 @@ package boxes;
  */
 public class PlaceConnection {
     
-            private int connection;
-            private double cost;
+	private int connection;
+	private double cost;
 
-            public PlaceConnection(int id, double cost) {
-                this.connection = id;
-                this.cost = cost;
-            }
+	public PlaceConnection(int id, double cost) {
+		this.connection = id;
+		this.cost = cost;
+	}
 
     /**
      * @return the connection
