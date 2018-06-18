@@ -55,11 +55,11 @@ public abstract class Handler {
             places.add(new Place(i,Data.PLACE_LIST.get(i),Data.getConnections(i)));
         }
 		
-//        new Window();
+        new Window();
         createMatrix();
 		
         currentStage = STAGE_LOCATE_PLACES;
-		consoleInput();
+//		consoleInput();
     }
     
     public static void createMatrix() {
